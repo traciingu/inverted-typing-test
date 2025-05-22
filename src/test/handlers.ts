@@ -2,8 +2,8 @@ import { http, HttpResponse } from 'msw'
 import { setupServer } from 'msw/node'
  
 const handlers = [
-  // Intercept the "GET /resource" request.
-  http.get('/randomWords', () => {
+  // Intercept the "GET" request.
+  http.get(`http://localhost:5173/randomWords`, () => {
     return HttpResponse.json([
         {
             "word": "Lubbock",

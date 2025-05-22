@@ -5,7 +5,27 @@ p {
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
-    span {
-        margin-right: 1em;
-    }
+    font-size: 2rem;
+
+}
+
+.word {
+    margin-right: 1em;
+    color: rgb(202, 202, 202);
+}
+
+input {
+    width: 100%;
+    border: none;
+    background-color: transparent;
+    transform: scaleX(-1);
+    font-size: 2rem;
+}
+
+.incorrect-letter {
+    color: rgb(185, 19, 19)
+}
+
+.correct-letter {
+    color: rgb(27, 27, 27)
 }
