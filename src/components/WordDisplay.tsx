@@ -7,7 +7,6 @@ const WordDisplay = () => {
     const [wordsMatrix, setWordsMatrix] = useState<string[][]>();
     const [inputtedWords, setInputtedWords] = useState<string[][]>();
     const [currentWordIndex, setCurrentWordIndex] = useState<number>(-1);
-    const [currentLetterIndex, setCurrentLetterIndex] = useState<number>(-1);
 
     useEffect(() => {
         const getWords = async () => {
@@ -24,16 +23,23 @@ const WordDisplay = () => {
     }, []);
 
     const handleOnKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
-        if (e.key === " ") {
-            setCurrentWordIndex(prevIndex => prevIndex + 1);
-        } else if (!inputtedWords) {
-            e.key.length === 1 && setInputtedWords([[e.key]]);
-        } else if (e.key === "Backspace") {
+
+        if (e.key.length > 1 && e.key !== "Backspace") {
+            return;
+        }
+
+        if (!inputtedWords) {
+            setInputtedWords([[e.key]]);
+            return;
+        }
+
+        if (e.key === "Backspace") {
             if (inputtedWords[currentWordIndex].length === 0 && currentWordIndex !== 0) {
                 setCurrentWordIndex(prevIndex => prevIndex - 1);
             } else {
                 setInputtedWords(prevWords => {
                     const prevWordsCpy = structuredClone(prevWords);
+
                     if (prevWordsCpy && currentWordIndex >= 0) {
                         prevWordsCpy[currentWordIndex].pop();
                     }
@@ -41,50 +47,62 @@ const WordDisplay = () => {
                     return prevWordsCpy;
                 });
             }
-        } else if (e.key.length === 1) {
-            setInputtedWords(prevWords => {
-                const prevWordsCpy = structuredClone(prevWords);
-                if (prevWordsCpy && currentWordIndex >= 0) {
-                    if (currentWordIndex + 1 > prevWordsCpy.length) {
-                        prevWordsCpy.push([e.key]);
-                    } else {
-                        prevWordsCpy[currentWordIndex].push(e.key);
-                    }
-                }
 
-                return prevWordsCpy;
-            });
+            return;
         }
-    }
 
-    const isLetterCorrect = (actualLetter:string, wordIndex: number, letterIndex: number): string => {
-        if(!inputtedWords) {
+        if (e.key === " ") {
+            setCurrentWordIndex(prevIndex => prevIndex + 1);
+            return;
+        }
+
+        setInputtedWords(prevWords => {
+            const prevWordsCpy = structuredClone(prevWords);
+
+            if (prevWordsCpy && currentWordIndex >= 0) {
+                if (currentWordIndex + 1 > prevWordsCpy.length) {
+                    prevWordsCpy.push([e.key]);
+                } else {
+                    prevWordsCpy[currentWordIndex].push(e.key);
+                }
+            }
+
+            return prevWordsCpy;
+        });
+
+        return;
+    };
+
+    const isLetterCorrect = (actualLetter: string, wordIndex: number, letterIndex: number): string => {
+        if (!inputtedWords) {
             return '';
         }
 
         const inputtedLetter = inputtedWords?.[wordIndex]?.[letterIndex];
 
-        if(inputtedLetter){
+        if (inputtedLetter) {
             return inputtedLetter === actualLetter ? "correct-letter" : "incorrect-letter";
         }
 
         return '';
-    }
+    };
 
     return (
         <div>
             <input type="text" onKeyDown={handleOnKeyDown} />
             <p>
                 {
-                    !wordsMatrix ? "" : wordsMatrix.map((arrOfWord, wordIndex) =>
-                        <span className={`word`}>
-                            {arrOfWord.map((letter, letterIndex) =>
-                                <span className={`letter ${isLetterCorrect(letter, wordIndex, letterIndex)}`}>
-                                    {letter}
-                                </span>
-                            )}
-                        </span>
-                    )}
+                    !wordsMatrix ? "" :
+                        wordsMatrix.map((arrOfWord, wordIndex) =>
+                            <span className={`word`}>
+                                {arrOfWord.map((letter, letterIndex) =>
+                                    <span className={`letter ${isLetterCorrect(letter, wordIndex, letterIndex)}`}>
+                                        {letter}
+                                    </span>
+                                )}
+                            </span>
+                        )
+                }
             </p>
         </div>
     );
