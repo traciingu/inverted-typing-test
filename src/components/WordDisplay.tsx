@@ -89,7 +89,8 @@ const WordDisplay = () => {
 
     return (
         <div>
-            <input type="text" onKeyDown={handleOnKeyDown} />
+            <label htmlFor="typing-input">Type here:</label>
+            <input type="text" id="typing-input" onKeyDown={handleOnKeyDown} />
             <p>
                 {
                     !wordsMatrix ? "" :

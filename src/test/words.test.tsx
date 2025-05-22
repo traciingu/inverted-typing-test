@@ -20,7 +20,7 @@ test('words appear backwards', async () => {
 
 test('correct and incorrect inputs display in the correct colours', async () => {
     render(<WordDisplay />);
-    const typingInput = screen.getByRole('textbox');
+    const typingInput = screen.getByRole('textbox', { name: /type here:/i });
     await user.click(typingInput);
     // Assuming first word is lubbock
     await user.keyboard('lk');
