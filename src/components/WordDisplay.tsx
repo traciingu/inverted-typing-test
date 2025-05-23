@@ -6,7 +6,6 @@ import { WordResponse } from '../../types'
 const WordDisplay = () => {
     const [wordsMatrix, setWordsMatrix] = useState<string[][]>();
     const [inputtedWords, setInputtedWords] = useState<string[][]>();
-    const [currentWordIndex, setCurrentWordIndex] = useState<number>(-1);
 
     useEffect(() => {
         const getWords = async () => {
@@ -15,7 +14,6 @@ const WordDisplay = () => {
             const wordResponseMatrix = responseData.map(element => element.word.toLowerCase().split(''));
             if (wordResponseMatrix.length > 0) {
                 setWordsMatrix(wordResponseMatrix);
-                setCurrentWordIndex(0);
             }
         };
 
@@ -29,9 +27,12 @@ const WordDisplay = () => {
         }
 
         if (!inputtedWords) {
+            if (e.key === "Backspace") {
+                return;
+            }
+
             if (e.key === " ") {
-                setInputtedWords([[]]);
-                setCurrentWordIndex(prevIndex => prevIndex + 1);
+                setInputtedWords([[], []]);
             } else {
                 setInputtedWords([[e.key]]);
             }
@@ -40,29 +41,41 @@ const WordDisplay = () => {
         }
 
         if (e.key === " ") {
-            setCurrentWordIndex(prevIndex => prevIndex + 1);
+            setInputtedWords(prevWords => {
+                const prevWordsCpy = structuredClone(prevWords);
 
-            // setInputtedWords(prevWords => {
-            //     const prevWordsCpy = structuredClone(prevWords);
+                if (prevWordsCpy) {
+                    prevWordsCpy.push([]);
+                }
 
-            //     if (prevWordsCpy && currentWordIndex >= 0) {
-            //         prevWordsCpy[currentWordIndex] = [];
-            //     }
+                return prevWordsCpy;
+            });
 
-            //     return prevWordsCpy;
-            // });
             return;
         }
 
         if (e.key === "Backspace") {
-            if (inputtedWords[currentWordIndex].length === 0 && currentWordIndex !== 0) {
-                setCurrentWordIndex(prevIndex => prevIndex - 1);
+            if (inputtedWords[inputtedWords.length - 1].length === 0) {
+                if (inputtedWords.length === 1) {
+                    setInputtedWords(undefined);
+                } else {
+                    setInputtedWords(prevWords => {
+                        const prevWordsCpy = structuredClone(prevWords);
+
+                        if (prevWordsCpy) {
+                            prevWordsCpy.pop();
+                        }
+
+                        return prevWordsCpy;
+                    });
+                }
+
             } else {
                 setInputtedWords(prevWords => {
                     const prevWordsCpy = structuredClone(prevWords);
 
-                    if (prevWordsCpy && currentWordIndex >= 0) {
-                        prevWordsCpy[currentWordIndex].pop();
+                    if (prevWordsCpy) {
+                        prevWordsCpy[prevWordsCpy.length - 1].pop();
                     }
 
                     return prevWordsCpy;
@@ -75,12 +88,8 @@ const WordDisplay = () => {
         setInputtedWords(prevWords => {
             const prevWordsCpy = structuredClone(prevWords);
 
-            if (prevWordsCpy && currentWordIndex >= 0) {
-                if (currentWordIndex + 1 > prevWordsCpy.length) {
-                    prevWordsCpy.push([e.key]);
-                } else {
-                    prevWordsCpy[currentWordIndex].push(e.key);
-                }
+            if (prevWordsCpy) {
+                prevWordsCpy[prevWordsCpy.length - 1].push(e.key);
             }
 
             return prevWordsCpy;
