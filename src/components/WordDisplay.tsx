@@ -29,7 +29,28 @@ const WordDisplay = () => {
         }
 
         if (!inputtedWords) {
-            setInputtedWords([[e.key]]);
+            if (e.key === " ") {
+                setInputtedWords([[]]);
+                setCurrentWordIndex(prevIndex => prevIndex + 1);
+            } else {
+                setInputtedWords([[e.key]]);
+            }
+
+            return;
+        }
+
+        if (e.key === " ") {
+            setCurrentWordIndex(prevIndex => prevIndex + 1);
+
+            // setInputtedWords(prevWords => {
+            //     const prevWordsCpy = structuredClone(prevWords);
+
+            //     if (prevWordsCpy && currentWordIndex >= 0) {
+            //         prevWordsCpy[currentWordIndex] = [];
+            //     }
+
+            //     return prevWordsCpy;
+            // });
             return;
         }
 
@@ -48,11 +69,6 @@ const WordDisplay = () => {
                 });
             }
 
-            return;
-        }
-
-        if (e.key === " ") {
-            setCurrentWordIndex(prevIndex => prevIndex + 1);
             return;
         }
 

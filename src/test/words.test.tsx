@@ -33,6 +33,20 @@ test('backspace removes a character', async () => {
     await expect(getComputedStyle(firstChar).color).toBe("rgb(202, 202, 202)");
 });
 
+test('space begins typing for the next word', async () => {
+    render(<WordDisplay />);
+
+    const secondWord = (await screen.findAllByTestId('word'))[1];
+    const firstChar = within(secondWord).getAllByText(/[a-z0-9]/i)[0];
+    await expect(firstChar.classList).not.toContain("incorrect-letter");
+
+    const typingInput = screen.getByRole('textbox', { name: /type here:/i });
+    await user.click(typingInput);
+    await user.keyboard('[Space]+');
+
+    await expect(firstChar.classList).toContain("incorrect-letter");
+});
+
 test('correct and incorrect inputs display in the correct colours', async () => {
     render(<WordDisplay />);
     const typingInput = screen.getByRole('textbox', { name: /type here:/i });
