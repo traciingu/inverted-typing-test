@@ -1,5 +1,5 @@
 import { afterAll, afterEach, beforeAll, expect, test } from 'vitest'
-import { cleanup, render, screen } from '@testing-library/react'
+import { cleanup, render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { server } from './handlers';
 import WordDisplay from '../components/WordDisplay';
@@ -17,6 +17,20 @@ test('words appear backwards', async () => {
     const firstWord = (await screen.findAllByTestId('word'))[0];
     const text = getComputedStyle(firstWord);
     await expect(text.transform).toBe("scaleX(-1)");
+});
+
+test('backspace removes a character', async () => {
+    render(<WordDisplay />);
+    const typingInput = screen.getByRole('textbox', { name: /type here:/i });
+    await user.click(typingInput);
+    await user.keyboard('+');
+
+    const firstWord = (await screen.findAllByTestId('word'))[0];
+    const firstChar = within(firstWord).getAllByText(/[a-z0-9]/i)[0];
+    await expect(getComputedStyle(firstChar).color).not.toBe("rgb(202, 202, 202)");
+
+    await user.keyboard('{Backspace}');
+    await expect(getComputedStyle(firstChar).color).toBe("rgb(202, 202, 202)");
 });
 
 test('correct and incorrect inputs display in the correct colours', async () => {
