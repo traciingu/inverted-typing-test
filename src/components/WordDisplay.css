@@ -21,10 +21,10 @@ input {
     font-size: 2rem;
 }
 
-.incorrect-letter {
+.incorrect-character {
     color: rgb(185, 19, 19)
 }
 
-.correct-letter {
+.correct-character {
     color: rgb(27, 27, 27)
 }

@@ -27,10 +27,10 @@ test('backspace removes a character', async () => {
 
     const firstWord = (await screen.findAllByTestId('word'))[0];
     const firstChar = within(firstWord).getAllByText(/[a-z0-9]/i)[0];
-    await expect(getComputedStyle(firstChar).color).not.toBe("rgb(202, 202, 202)");
+    await expect(firstChar.classList).toContain("incorrect-character");
 
     await user.keyboard('{Backspace}');
-    await expect(getComputedStyle(firstChar).color).toBe("rgb(202, 202, 202)");
+    await expect(firstChar.classList).not.toContain("incorrect-character");
 });
 
 test('space begins typing for the next word', async () => {
@@ -38,13 +38,13 @@ test('space begins typing for the next word', async () => {
 
     const secondWord = (await screen.findAllByTestId('word'))[1];
     const firstChar = within(secondWord).getAllByText(/[a-z0-9]/i)[0];
-    await expect(firstChar.classList).not.toContain("incorrect-letter");
+    await expect(firstChar.classList).not.toContain("incorrect-character");
 
     const typingInput = screen.getByRole('textbox', { name: /type here:/i });
     await user.click(typingInput);
     await user.keyboard('[Space]+');
 
-    await expect(firstChar.classList).toContain("incorrect-letter");
+    await expect(firstChar.classList).toContain("incorrect-character");
 });
 
 test('correct and incorrect inputs display in the correct colours', async () => {
@@ -54,11 +54,9 @@ test('correct and incorrect inputs display in the correct colours', async () => 
     // Assuming first word is lubbock
     await user.keyboard('lk');
 
-    const firstLetter = screen.getAllByText('l')[0];
-    const fLetterStyling = getComputedStyle(firstLetter);
-    await expect(fLetterStyling.color).toBe("rgb(27, 27, 27)");
+    const firstChar = screen.getAllByText('l')[0];
+    await expect(firstChar.classList).toContain("correct-character");
 
-    const secondLetter = screen.getAllByText('u')[0];
-    const sLetterStyling = getComputedStyle(secondLetter);
-    await expect(sLetterStyling.color).toBe("rgb(185, 19, 19)");
+    const secondChar = screen.getAllByText('u')[0];
+    await expect(secondChar.classList).toContain("incorrect-character");
 });

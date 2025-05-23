@@ -89,15 +89,15 @@ const WordDisplay = () => {
         return;
     };
 
-    const isLetterCorrect = (actualLetter: string, wordIndex: number, letterIndex: number): string => {
+    const isCharacterCorrect = (actualChar: string, wordIndex: number, charIndex: number): string => {
         if (!inputtedWords) {
             return '';
         }
 
-        const inputtedLetter = inputtedWords?.[wordIndex]?.[letterIndex];
+        const inputtedChar = inputtedWords?.[wordIndex]?.[charIndex];
 
-        if (inputtedLetter) {
-            return inputtedLetter === actualLetter ? "correct-letter" : "incorrect-letter";
+        if (inputtedChar) {
+            return inputtedChar === actualChar ? "correct-character" : "incorrect-character";
         }
 
         return '';
@@ -112,9 +112,9 @@ const WordDisplay = () => {
                     !wordsMatrix ? "" :
                         wordsMatrix.map((arrOfWord, wordIndex) =>
                             <span className="word" data-testid="word">
-                                {arrOfWord.map((letter, letterIndex) =>
-                                    <span className={`letter ${isLetterCorrect(letter, wordIndex, letterIndex)}`}>
-                                        {letter}
+                                {arrOfWord.map((char, charIndex) =>
+                                    <span className={`character ${isCharacterCorrect(char, wordIndex, charIndex)}`}>
+                                        {char}
                                     </span>
                                 )}
                             </span>
