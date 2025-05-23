@@ -95,7 +95,7 @@ const WordDisplay = () => {
                 {
                     !wordsMatrix ? "" :
                         wordsMatrix.map((arrOfWord, wordIndex) =>
-                            <span className={`word`}>
+                            <span className="word" data-testid="word">
                                 {arrOfWord.map((letter, letterIndex) =>
                                     <span className={`letter ${isLetterCorrect(letter, wordIndex, letterIndex)}`}>
                                         {letter}

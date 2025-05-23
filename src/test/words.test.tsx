@@ -14,7 +14,8 @@ afterAll(() => server.close());
 
 test('words appear backwards', async () => {
     render(<WordDisplay />);
-    const text = getComputedStyle(screen.getByRole('paragraph'));
+    const firstWord = (await screen.findAllByTestId('word'))[0];
+    const text = getComputedStyle(firstWord);
     await expect(text.transform).toBe("scaleX(-1)");
 });
 
