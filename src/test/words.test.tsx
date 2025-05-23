@@ -47,6 +47,30 @@ test('space begins typing for the next word', async () => {
     await expect(firstChar.classList).toContain("incorrect-character");
 });
 
+test('backspacing when there are no typed characters for a word will return to typing for the previous word', async () => {
+    render(<WordDisplay />);
+
+    const wordsOnscreen = (await screen.findAllByTestId('word'));
+    const firstWord = wordsOnscreen[0];
+    const secondWord = wordsOnscreen[1];
+    const firstCharOfFirstWord = within(firstWord).getAllByText(/[a-z0-9]/i)[0];
+    const firstCharOfSecondWord = within(secondWord).getAllByText(/[a-z0-9]/i)[0];
+
+    await expect(firstCharOfSecondWord.classList).not.toContain('incorrect-character');
+
+    const typingInput = screen.getByRole('textbox', { name: /type here:/i });
+    await user.click(typingInput);
+    await user.keyboard('[Space]+');
+
+    await expect(firstCharOfSecondWord.classList).toContain('incorrect-character');
+    await expect(firstCharOfFirstWord.classList).not.toContain('incorrect-character');
+
+    await user.keyboard('[Backspace][Backspace]+');
+
+    await expect(firstCharOfFirstWord.classList).toContain('incorrect-character');
+});
+
+
 test('correct and incorrect inputs display in the correct colours', async () => {
     render(<WordDisplay />);
     const typingInput = screen.getByRole('textbox', { name: /type here:/i });
