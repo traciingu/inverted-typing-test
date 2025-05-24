@@ -70,6 +70,16 @@ test('backspacing when there are no typed characters for a word will return to t
     await expect(firstCharOfFirstWord.classList).toContain('incorrect-character');
 });
 
+test('input does not register special keyboard keys', async () => {
+    render(<WordDisplay />);
+    const typingInput = screen.getByRole('textbox', { name: /type here:/i });
+    await user.click(typingInput);
+    await user.keyboard('[AltLeft][ShiftLeft][Enter][ArrowUp][Home]');
+    const firstWord = (await screen.findAllByTestId('word'))[0];
+    const firstChar = within(firstWord).getAllByText(/[a-z0-9]/i)[0];
+
+    await expect(firstChar.classList).not.toContain('incorrect-character');
+});
 
 test('correct and incorrect inputs display in the correct colours', async () => {
     render(<WordDisplay />);
