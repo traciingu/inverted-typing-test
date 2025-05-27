@@ -15,8 +15,8 @@ afterAll(() => server.close());
 test('words appear backwards', async () => {
     render(<WordDisplay />);
     const firstWord = (await screen.findAllByTestId('word'))[0];
-    const text = getComputedStyle(firstWord);
-    await expect(text.transform).toBe("scaleX(-1)");
+    const text = window.getComputedStyle(firstWord);
+    await expect(text.getPropertyValue("transform")).toBe("scaleX(-1)");
 });
 
 test('backspace removes a character', async () => {

@@ -113,10 +113,10 @@ const WordDisplay = () => {
     };
 
     return (
-        <div>
-            <label htmlFor="typing-input">Type here:</label>
-            <input type="text" id="typing-input" onKeyDown={handleOnKeyDown} />
-            <p>
+        <div className="word-display-container">
+            <label htmlFor="typing-input" className="word-display-input-label">Type here:</label>
+            <input type="text" id="typing-input" className='word-display-input' onKeyDown={handleOnKeyDown} />
+            <p className="word-display">
                 {
                     !wordsMatrix ? "" :
                         wordsMatrix.map((arrOfWord, wordIndex) =>
