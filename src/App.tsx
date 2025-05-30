@@ -1,12 +1,12 @@
-import { useState } from 'react'
-
 import './App.css'
 import WordDisplay from './components/WordDisplay'
+import Timer from './components/Timer'
 
 function App() {
 
   return (
     <>
+      <Timer />
       <WordDisplay />
     </>
   )
