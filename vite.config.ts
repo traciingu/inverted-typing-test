@@ -9,14 +9,15 @@ export default defineConfig({
     host: "0.0.0.0", // Here
     cors: true,
     proxy: {
-        '^/randomWords.*': {
-          target: "http://api.wordnik.com/v4/words.json/",
-          changeOrigin: true
-        },
+      '^/randomWords.*': {
+        target: "http://api.wordnik.com/v4/words.json/",
+        changeOrigin: true
+      },
     }
   },
   test: {
+    // reporters: ['html'],
     environment: 'jsdom',
-    css: true
+    css: true,
   }
 })
