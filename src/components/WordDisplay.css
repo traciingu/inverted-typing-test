@@ -12,10 +12,10 @@
     display: flex;
     flex-wrap: wrap;
     font-size: 2rem;
+    transform: scaleX(-1);
 }
 
 .word {
-    transform: scaleX(-1);
     margin-right: 1em;
     color: rgb(202, 202, 202);
 }
