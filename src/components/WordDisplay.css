@@ -1,31 +1,68 @@
+.word-display-outer-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: 0 5rem;
+    margin-top: 1em;
+}
+
 .word-display-container {
-    text-align: left;
+    position: relative;
+    margin-top: 1em;
+    display: flex;
+    justify-content: center;
+
+    max-width: 55ch;
+    height: 50vh;
+    max-height: 300px;
+
+    font-size: 2rem;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.word-display {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: .5em;
+    margin: 0;
+
+    overflow-y: scroll;
+    scrollbar-width: none;
+    transform: scaleX(-1);
 }
 
 .word-display-input-label {
     font-size: 1.25rem;
-}
-
-.word-display {
-    width: 100%;
-    max-width: 100%;
-    display: flex;
-    flex-wrap: wrap;
-    font-size: 2rem;
-    transform: scaleX(-1);
-}
-
-.word {
-    margin-right: 1em;
-    color: rgb(202, 202, 202);
+    text-align: left;
 }
 
 .word-display-input {
+    position: absolute;
+    z-index: 1;
+
     width: 100%;
+    height: inherit;
+    max-height: inherit;
+
     border: none;
     background-color: transparent;
     transform: scaleX(-1);
-    font-size: 2rem;
+    color: transparent;
+
+    &::selection {
+        color: transparent;
+        background-color: transparent;
+    }
+}
+
+.word {
+    color: rgb(202, 202, 202);
 }
 
 .incorrect-character {
