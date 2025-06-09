@@ -17,7 +17,8 @@ export default defineConfig({
   },
   test: {
     // reporters: ['html'],
-    environment: 'jsdom',
+    environment: 'happy-dom',
     css: true,
+
   }
 })
