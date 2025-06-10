@@ -43,17 +43,19 @@ test('timer elapses every second', async () => {
 });
 
 test('timer starts when user begins to type', async () => {
-    render(<App/>);
+    render(<App />);
     
     const timer = screen.getAllByRole('paragraph')[0];
 
     expect(timer.textContent).toBe("Time: 30");
+    const initialTime = parseInt(timer.textContent?.slice(-2) || '');
 
-    const typingInput = screen.getByRole("textbox", {name: /type here:/i});
+    const typingInput = screen.getByRole("textbox", { name: /type here:/i });
     await user.click(typingInput);
     await user.keyboard("abc123");
 
-    vi.advanceTimersByTime(1000);
+    act(() => vi.advanceTimersByTime(1000));
 
-    expect(timer.textContent).not.toBe("Time: 29");
+    const finalTime = parseInt(timer.textContent?.slice(-2) || '');
+    expect(finalTime).toBeLessThan(initialTime);
 });

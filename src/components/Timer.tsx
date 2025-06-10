@@ -19,7 +19,12 @@ const Timer = ({ timeLimit = 60 * 1000, testIsRunning, setTestIsRunning }:
     };
 
     const resetTimer = () => {
+        if (setTestIsRunning) {
+            setTestIsRunning(false);
+        }
+
         cancelAnimationFrame(requestId.current || 0);
+        requestId.current = undefined;
         setTimeRemaining(timeLimit / 1000);
     };
 
