@@ -1,51 +1,26 @@
-import { act, cleanup, render, screen } from "@testing-library/react";
-import { afterEach, beforeEach, expect, test, vi } from "vitest";
-import Timer from "../components/Timer";
+import { act, cleanup, render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import App from "../App";
-import { server } from "./handlers";
+import { afterAll, afterEach, beforeAll, beforeEach, expect, test, vi } from "vitest";
+import App from "../../App";
+import { server } from "../handlers";
 
-const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
+const user = userEvent.setup();
+
+beforeAll(() => server.listen());
+
 beforeEach(() => {
     server.listen();
     vi.useFakeTimers({ shouldAdvanceTime: true });
 });
 
 afterEach(() => {
-    server.close();
+    server.resetHandlers();
     cleanup();
     vi.runOnlyPendingTimers();
     vi.useRealTimers();
 });
 
-test('timer elapses every second', async () => {
-    const timeLimitInSecs = 5;
-    render(<Timer
-        timeLimit={timeLimitInSecs * 1000}
-        testIsRunning={true}
-        setTestIsRunning={() => { return }}
-        setTestIsCompleted={() => { return }}
-    />);
-
-    const time = screen.getByText(`Time: ${timeLimitInSecs}`);
-    expect(time.textContent).toBe(`Time: ${timeLimitInSecs}`);
-
-    const startBtn = screen.getByRole("button", { name: /start/i });
-    await user.click(startBtn);
-
-    const timeToElapse = 1;
-    for (let i = 0; i < timeToElapse * 60; i++) {
-        act(() => { vi.advanceTimersToNextFrame(); });
-    }
-
-    expect(time.textContent).toBe(`Time: ${timeLimitInSecs - timeToElapse}`);
-
-    for (let i = 0; i < timeToElapse * 60; i++) {
-        act(() => { vi.advanceTimersToNextFrame(); });
-    }
-
-    expect(time.textContent).toBe(`Time: ${timeLimitInSecs - (timeToElapse * 2)}`);
-});
+afterAll(() => server.close());
 
 test('timer starts when user begins to type', async () => {
     render(<App />);
@@ -83,4 +58,23 @@ test('disable typing when timer runs out', async () => {
 
     expect(timer.textContent).toBe("Time: 0");
     expect(typingInput.getAttribute("disabled")).not.toBeNull();
+});
+
+test('all typed characters are cleared when the test is resetted', async () => {
+    render(<App />);
+
+    const input = screen.getByRole('textbox', { name: /type here:/i });
+    const wordDisplay = screen.getByRole('paragraph');
+
+    const firstWord = (await within(wordDisplay).findAllByTestId("word"))[0];
+    const firstChar = within(firstWord).getAllByRole('generic')[0];
+
+    await user.click(input);
+    await user.keyboard('abc');
+
+    expect(firstChar.classList).toContain("incorrect-character");
+
+    await user.click(screen.getByRole("button", { name: /reset/i }));
+
+    expect(firstChar.classList).not.toContain("incorrect-character");
 });
