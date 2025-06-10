@@ -3,7 +3,7 @@ import './styles/WordDisplay.css'
 import { apiRequest } from '../baseRequests';
 import { WordResponse } from '../../types'
 
-const WordDisplay = ({ setTestIsRunning }: { setTestIsRunning?: React.Dispatch<React.SetStateAction<boolean>> }) => {
+const WordDisplay = ({ setTestIsRunning, testIsCompleted }: { setTestIsRunning: (isRunning: boolean) => void, testIsCompleted: boolean }) => {
     const [wordsMatrix, setWordsMatrix] = useState<string[][]>();
     const [inputtedWords, setInputtedWords] = useState<string[][]>();
     const [currentWordIndex, setCurrentWordIndex] = useState<number>(-1);
@@ -27,9 +27,7 @@ const WordDisplay = ({ setTestIsRunning }: { setTestIsRunning?: React.Dispatch<R
     });
 
     const handleOnKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
-        if (setTestIsRunning) {
-            setTestIsRunning(true);
-        }
+        setTestIsRunning(true);
 
         if (e.key.length > 1 && e.key !== "Backspace") {
             return;
@@ -138,6 +136,7 @@ const WordDisplay = ({ setTestIsRunning }: { setTestIsRunning?: React.Dispatch<R
                     id="typing-input"
                     className='word-display-input'
                     onKeyDown={handleOnKeyDown}
+                    disabled={testIsCompleted}
                 />
                 <p className="word-display">
                     {

@@ -59,3 +59,23 @@ test('timer starts when user begins to type', async () => {
     const finalTime = parseInt(timer.textContent?.slice(-2) || '');
     expect(finalTime).toBeLessThan(initialTime);
 });
+
+test('disable typing when timer runs out', async () => {
+    render(<App />);
+
+    const timer = screen.getByText("Time: 30");
+    const initialTime = parseInt(timer.textContent?.slice(-2) || '');
+
+    const typingInput = screen.getByRole("textbox", { name: /type here:/i });
+    expect(typingInput.getAttribute("disabled")).toBeNull();
+
+    await user.click(typingInput);
+    await user.keyboard("abc123");
+
+    for (let i = 0; i < ((60 * initialTime) + 60); i++) {
+        act(() => vi.advanceTimersToNextFrame());
+    }
+
+    expect(timer.textContent).toBe("Time: 0");
+    expect(typingInput.getAttribute("disabled")).not.toBeNull();
+});

@@ -1,14 +1,18 @@
 import { useEffect, useRef, useState } from "react";
 import './styles/Timer.css';
 
-const Timer = ({ timeLimit = 60 * 1000, testIsRunning, setTestIsRunning }:
-    { timeLimit?: number, testIsRunning?: boolean, setTestIsRunning?: React.Dispatch<React.SetStateAction<boolean>> }) => {
+const Timer = ({ timeLimit = 60 * 1000, testIsRunning, setTestIsRunning, setTestIsCompleted }:
+    { timeLimit?: number, testIsRunning: boolean, setTestIsRunning: (isRunning: boolean) => void, setTestIsCompleted: (isCompleted: boolean) => void }) => {
     const requestId = useRef<number>(undefined);
     const [timeRemaining, setTimeRemaining] = useState<number>(timeLimit / 1000);
     const startTime = useRef<number>(-1);
 
     function updateTimeRemaining() {
-        setTimeRemaining(Math.floor((timeLimit - (performance.now() - startTime.current)) / 1000));
+        const calculatedTimeRemaing = Math.floor((timeLimit - (performance.now() - startTime.current)) / 1000);
+        if (calculatedTimeRemaing >= 0) {
+            setTimeRemaining(calculatedTimeRemaing);
+        }
+        
         requestId.current = requestAnimationFrame(updateTimeRemaining);
     };
 
@@ -20,9 +24,8 @@ const Timer = ({ timeLimit = 60 * 1000, testIsRunning, setTestIsRunning }:
     };
 
     const resetTimer = () => {
-        if (setTestIsRunning) {
-            setTestIsRunning(false);
-        }
+        setTestIsRunning(false);
+        setTestIsCompleted(false);
 
         cancelAnimationFrame(requestId.current || 0);
         requestId.current = undefined;
@@ -35,9 +38,8 @@ const Timer = ({ timeLimit = 60 * 1000, testIsRunning, setTestIsRunning }:
         }
 
         if (timeRemaining <= 0) {
-            if (setTestIsRunning) {
-                setTestIsRunning(false);
-            }
+            setTestIsRunning(false);
+            setTestIsCompleted(true);
 
             cancelAnimationFrame(requestId.current || 0);
         }

@@ -5,11 +5,15 @@ import { useState } from 'react'
 
 function App() {
   const [testIsRunning, setTestIsRunning] = useState<boolean>(false);
+  const [testIsCompleted, setTestIsCompleted] = useState<boolean>(false);
+
+  const handleSetTestIsRunning = (isRunning: boolean) => { setTestIsRunning(isRunning) };
+  const handleSetTestIsCompleted = (isCompleted: boolean) => { setTestIsCompleted(isCompleted) }
 
   return (
     <>
-      <Timer timeLimit={30 * 1000} testIsRunning={testIsRunning} setTestIsRunning={setTestIsRunning} />
-      <WordDisplay setTestIsRunning={setTestIsRunning} />
+      <Timer timeLimit={30 * 1000} testIsRunning={testIsRunning} setTestIsRunning={handleSetTestIsRunning} setTestIsCompleted={handleSetTestIsCompleted} />
+      <WordDisplay setTestIsRunning={handleSetTestIsRunning} testIsCompleted={testIsCompleted} />
     </>
   )
 }
