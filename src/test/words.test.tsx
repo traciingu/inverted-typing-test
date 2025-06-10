@@ -13,13 +13,13 @@ afterEach(() => {
 afterAll(() => server.close());
 
 test('words appear backwards', async () => {
-    render(<WordDisplay />);
+    render(<WordDisplay testIsCompleted={false} setTestIsRunning={() => {return}}/>);
     const wordDisplay = screen.getByRole('paragraph');
     await expect(getComputedStyle(wordDisplay).transform).toBe("scaleX(-1)");
 });
 
 test('backspace removes a character', async () => {
-    render(<WordDisplay />);
+    render(<WordDisplay testIsCompleted={false} setTestIsRunning={() => {return}}/>);
     const typingInput = screen.getByRole('textbox', { name: /type here:/i });
     await user.click(typingInput);
     await user.keyboard('+');
@@ -33,7 +33,7 @@ test('backspace removes a character', async () => {
 });
 
 test('space begins typing for the next word', async () => {
-    render(<WordDisplay />);
+render(<WordDisplay testIsCompleted={false} setTestIsRunning={() => {return}}/>);
 
     const secondWord = (await screen.findAllByTestId('word'))[1];
     const firstChar = within(secondWord).getAllByText(/[a-z0-9]/i)[0];
@@ -47,7 +47,7 @@ test('space begins typing for the next word', async () => {
 });
 
 test('backspacing when there are no typed characters for a word will return to typing for the previous word', async () => {
-    render(<WordDisplay />);
+    render(<WordDisplay testIsCompleted={false} setTestIsRunning={() => {return}}/>);
 
     const wordsOnscreen = (await screen.findAllByTestId('word'));
     const firstWord = wordsOnscreen[0];
@@ -70,7 +70,7 @@ test('backspacing when there are no typed characters for a word will return to t
 });
 
 test('input does not register special keyboard keys', async () => {
-    render(<WordDisplay />);
+    render(<WordDisplay testIsCompleted={false} setTestIsRunning={() => {return}}/>);
     const typingInput = screen.getByRole('textbox', { name: /type here:/i });
     await user.click(typingInput);
     await user.keyboard('[AltLeft][ShiftLeft][Enter][ArrowUp][Home]');
@@ -81,7 +81,7 @@ test('input does not register special keyboard keys', async () => {
 });
 
 test('correct and incorrect inputs display in the correct colours', async () => {
-    render(<WordDisplay />);
+    render(<WordDisplay testIsCompleted={false} setTestIsRunning={() => {return}}/>);
     const typingInput = screen.getByRole('textbox', { name: /type here:/i });
     await user.click(typingInput);
     // Assuming first word is lubbock

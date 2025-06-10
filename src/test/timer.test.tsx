@@ -20,7 +20,12 @@ afterEach(() => {
 
 test('timer elapses every second', async () => {
     const timeLimitInSecs = 5;
-    render(<Timer timeLimit={timeLimitInSecs * 1000} />);
+    render(<Timer
+        timeLimit={timeLimitInSecs * 1000}
+        testIsRunning={true}
+        setTestIsRunning={() => { return }}
+        setTestIsCompleted={() => { return }}
+    />);
 
     const time = screen.getByText(`Time: ${timeLimitInSecs}`);
     expect(time.textContent).toBe(`Time: ${timeLimitInSecs}`);
