@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import './styles/Timer.css';
 
 const Timer = ({ timeLimit = 60 * 1000, testIsRunning, setTestIsRunning }:
     { timeLimit?: number, testIsRunning?: boolean, setTestIsRunning?: React.Dispatch<React.SetStateAction<boolean>> }) => {
@@ -43,10 +44,12 @@ const Timer = ({ timeLimit = 60 * 1000, testIsRunning, setTestIsRunning }:
     });
 
     return (
-        <div>
-            <button onClick={startTimer}>Start</button>
-            <button onClick={resetTimer}>Reset</button>
-            <p>Time: {timeRemaining}</p>
+        <div className="timer-container">
+            <div className="timer-controls">
+                <button onClick={startTimer}>Start</button>
+                <button onClick={resetTimer}>Reset</button>
+            </div>
+            <div className="timer-display">Time: {timeRemaining}</div>
         </div>
     );
 };

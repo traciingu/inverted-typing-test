@@ -22,7 +22,7 @@ test('timer elapses every second', async () => {
     const timeLimitInSecs = 5;
     render(<Timer timeLimit={timeLimitInSecs * 1000} />);
 
-    const time = screen.getByRole('paragraph');
+    const time = screen.getByText(`Time: ${timeLimitInSecs}`);
     expect(time.textContent).toBe(`Time: ${timeLimitInSecs}`);
 
     const startBtn = screen.getByRole("button", { name: /start/i });
@@ -44,8 +44,8 @@ test('timer elapses every second', async () => {
 
 test('timer starts when user begins to type', async () => {
     render(<App />);
-    
-    const timer = screen.getAllByRole('paragraph')[0];
+
+    const timer = screen.getByText('Time: 30');
 
     expect(timer.textContent).toBe("Time: 30");
     const initialTime = parseInt(timer.textContent?.slice(-2) || '');

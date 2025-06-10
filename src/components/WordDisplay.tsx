@@ -1,5 +1,5 @@
 import { KeyboardEvent, useEffect, useRef, useState } from 'react';
-import './WordDisplay.css'
+import './styles/WordDisplay.css'
 import { apiRequest } from '../baseRequests';
 import { WordResponse } from '../../types'
 
