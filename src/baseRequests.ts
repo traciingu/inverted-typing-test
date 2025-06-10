@@ -6,6 +6,6 @@ export const apiRequest = axios.create({
         "api_key": import.meta.env.VITE_API_KEY,
         "excludePartOfSpeech": "combining-form,family-name,given-name,interjection,abbreviation,idiom,affix,phrasal-verb,suffix,proper-noun,proper-noun-posessive,proper-noun-plural",
         "minCorpusCount": 5000,
-        "limit": 30
+        "limit": 60
     }
 });
