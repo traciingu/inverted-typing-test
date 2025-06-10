@@ -3,6 +3,7 @@ import { cleanup, render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { server } from './handlers';
 import WordDisplay from '../components/WordDisplay';
+import App from '../App';
 
 const user = userEvent.setup();
 beforeAll(() => server.listen());
@@ -92,4 +93,23 @@ test('correct and incorrect inputs display in the correct colours', async () => 
 
     const secondChar = screen.getAllByText('u')[0];
     await expect(secondChar.classList).toContain("incorrect-character");
+});
+
+test('all typed characters are cleared when the test is resetted', async () => {
+    render(<App/>);
+
+    const input = screen.getByRole('textbox', { name: /type here:/i });
+    const wordDisplay = screen.getByRole('paragraph');
+
+    const firstWord = (await within(wordDisplay).findAllByTestId("word"))[0];
+    const firstChar = within(firstWord).getAllByRole('generic')[0];
+
+    await user.click(input);
+    await user.keyboard('abc');
+
+    expect(firstChar.classList).toContain("incorrect-character");
+
+    await user.click(screen.getByRole("button", {name: /reset/i}));
+
+    expect(firstChar.classList).not.toContain("incorrect-character");
 });

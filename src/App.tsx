@@ -13,7 +13,7 @@ function App() {
   return (
     <>
       <Timer timeLimit={30 * 1000} testIsRunning={testIsRunning} setTestIsRunning={handleSetTestIsRunning} setTestIsCompleted={handleSetTestIsCompleted} />
-      <WordDisplay setTestIsRunning={handleSetTestIsRunning} testIsCompleted={testIsCompleted} />
+      <WordDisplay testIsRunning={testIsRunning} setTestIsRunning={handleSetTestIsRunning} testIsCompleted={testIsCompleted}/>
     </>
   )
 }

@@ -3,7 +3,7 @@ import './styles/WordDisplay.css'
 import { apiRequest } from '../baseRequests';
 import { WordResponse } from '../../types'
 
-const WordDisplay = ({ setTestIsRunning, testIsCompleted }: { setTestIsRunning: (isRunning: boolean) => void, testIsCompleted: boolean }) => {
+const WordDisplay = ({ testIsRunning, setTestIsRunning, testIsCompleted }: { testIsRunning: boolean, setTestIsRunning: (isRunning: boolean) => void, testIsCompleted: boolean }) => {
     const [wordsMatrix, setWordsMatrix] = useState<string[][]>();
     const [inputtedWords, setInputtedWords] = useState<string[][]>();
     const [currentWordIndex, setCurrentWordIndex] = useState<number>(-1);
@@ -21,6 +21,12 @@ const WordDisplay = ({ setTestIsRunning, testIsCompleted }: { setTestIsRunning: 
 
         getWords();
     }, []);
+
+    useEffect(() => {
+        if (!testIsRunning) {
+            setInputtedWords(undefined);
+        }
+    }, [testIsRunning]);
 
     useEffect(() => {
         currentWordRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
