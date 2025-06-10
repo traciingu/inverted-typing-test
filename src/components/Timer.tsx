@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 
-const Timer = ({ timeLimit = 60 * 1000 }: { timeLimit?: number }) => {
+const Timer = ({ timeLimit = 60 * 1000, testIsRunning, setTestIsRunning }:
+    { timeLimit?: number, testIsRunning?: boolean, setTestIsRunning?: React.Dispatch<React.SetStateAction<boolean>> }) => {
     const requestId = useRef<number>(undefined);
     const [timeRemaining, setTimeRemaining] = useState<number>(timeLimit / 1000);
     const startTime = useRef<number>(-1);
@@ -23,7 +24,15 @@ const Timer = ({ timeLimit = 60 * 1000 }: { timeLimit?: number }) => {
     };
 
     useEffect(() => {
+        if (!requestId.current && testIsRunning) {
+            startTimer();
+        }
+
         if (timeRemaining <= 0) {
+            if (setTestIsRunning) {
+                setTestIsRunning(false);
+            }
+
             cancelAnimationFrame(requestId.current || 0);
         }
     });

@@ -3,7 +3,7 @@ import './WordDisplay.css'
 import { apiRequest } from '../baseRequests';
 import { WordResponse } from '../../types'
 
-const WordDisplay = () => {
+const WordDisplay = ({ setTestIsRunning }: { setTestIsRunning?: React.Dispatch<React.SetStateAction<boolean>> }) => {
     const [wordsMatrix, setWordsMatrix] = useState<string[][]>();
     const [inputtedWords, setInputtedWords] = useState<string[][]>();
     const [currentWordIndex, setCurrentWordIndex] = useState<number>(-1);
@@ -27,11 +27,17 @@ const WordDisplay = () => {
     });
 
     const handleOnKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+        if (setTestIsRunning) {
+            setTestIsRunning(true);
+        }
+
         if (e.key.length > 1 && e.key !== "Backspace") {
             return;
         }
 
         if (!inputtedWords) {
+
+
             if (e.key === "Backspace") {
                 return;
             }

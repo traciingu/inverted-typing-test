@@ -1,14 +1,19 @@
-import { act, render, screen } from "@testing-library/react";
+import { act, cleanup, render, screen } from "@testing-library/react";
 import { afterEach, beforeEach, expect, test, vi } from "vitest";
 import Timer from "../components/Timer";
 import userEvent from "@testing-library/user-event";
+import App from "../App";
+import { server } from "./handlers";
 
 const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
 beforeEach(() => {
+    server.listen();
     vi.useFakeTimers({ shouldAdvanceTime: true });
 });
 
 afterEach(() => {
+    server.close();
+    cleanup();
     vi.runOnlyPendingTimers();
     vi.useRealTimers();
 });
@@ -35,4 +40,20 @@ test('timer elapses every second', async () => {
     }
 
     expect(time.textContent).toBe(`Time: ${timeLimitInSecs - (timeToElapse * 2)}`);
+});
+
+test('timer starts when user begins to type', async () => {
+    render(<App/>);
+    
+    const timer = screen.getAllByRole('paragraph')[0];
+
+    expect(timer.textContent).toBe("Time: 30");
+
+    const typingInput = screen.getByRole("textbox", {name: /type here:/i});
+    await user.click(typingInput);
+    await user.keyboard("abc123");
+
+    vi.advanceTimersByTime(1000);
+
+    expect(timer.textContent).not.toBe("Time: 29");
 });
