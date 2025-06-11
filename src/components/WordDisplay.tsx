@@ -33,11 +33,11 @@ const WordDisplay = ({ testIsRunning, setTestIsRunning, testIsCompleted }: { tes
     });
 
     const handleOnKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
-        setTestIsRunning(true);
-
         if (e.key.length > 1 && e.key !== "Backspace") {
             return;
         }
+
+        setTestIsRunning(true);
 
         if (!inputtedWords) {
 
