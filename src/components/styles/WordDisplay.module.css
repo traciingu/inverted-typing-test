@@ -37,7 +37,7 @@
     transform: scaleX(-1);
 }
 
-.upside-down>span {
+.upside-down>.word {
     transform: scaleY(-1);
 }
 
@@ -84,7 +84,7 @@
 
 }
 
-input[type="radio"] {
+input[name="test-type"][type="radio"] {
     opacity: 0;
 }
 
