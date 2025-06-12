@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import './styles/Timer.css';
+import styleClasses from './styles/Timer.module.css';
 
 const Timer = ({ timeLimit = 60 * 1000, testIsRunning, setTestIsRunning, setTestIsCompleted }:
     { timeLimit?: number, testIsRunning: boolean, setTestIsRunning: (isRunning: boolean) => void, setTestIsCompleted: (isCompleted: boolean) => void }) => {
@@ -46,8 +46,8 @@ const Timer = ({ timeLimit = 60 * 1000, testIsRunning, setTestIsRunning, setTest
     });
 
     return (
-        <div className="timer-container">
-            <div className="timer-controls">
+        <div className={`${styleClasses["timer-container"]}`}>
+            <div className={`${styleClasses["timer-controls"]}`}>
                 <button onClick={startTimer}>Start</button>
                 <button onClick={resetTimer}>Reset</button>
             </div>

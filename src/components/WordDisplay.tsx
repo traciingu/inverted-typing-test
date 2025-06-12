@@ -1,5 +1,5 @@
 import { KeyboardEvent, MouseEvent, useEffect, useRef, useState } from 'react';
-import './styles/WordDisplay.css'
+import styleClasses from './styles/WordDisplay.module.css'
 import { apiRequest } from '../baseRequests';
 import { WordResponse } from '../../types'
 
@@ -139,38 +139,38 @@ const WordDisplay = ({ testIsRunning, setTestIsRunning, testIsCompleted }: { tes
     };
 
     return (
-        <div className='word-display-outer-container'>
-            <div className="test-type-btns-container">
+        <div className={`${styleClasses["word-display-outer-container"]}`}>
+            <div className={`${styleClasses["test-type-btns-container"]}`}>
                 <div >
                     <input type="radio" id="backwards" value="backwards" name="test-type" defaultChecked onClick={handleTestTypeChange} />
-                    <label htmlFor="backwards" className="test-type-label">Backwards</label>
+                    <label htmlFor="backwards" className={`${styleClasses["test-type-label"]}`}>Backwards</label>
                 </div>
                 <div>
                     <input type="radio" id="upside-down" value="upside-down" name="test-type" onClick={handleTestTypeChange} />
-                    <label htmlFor="upside-down" className="test-type-label">Upside-Down</label>
+                    <label htmlFor="upside-down" className={`${styleClasses["test-type-label"]}`}>Upside-Down</label>
                 </div>
             </div>
-            <label htmlFor="typing-input" className="word-display-input-label">Type here:</label>
-            <div className="word-display-container">
+            <label htmlFor="typing-input" className={`${styleClasses["word-display-input-label"]}`}>Type here:</label>
+            <div className={`${styleClasses["word-display-container"]}`}>
                 <input
                     type="text"
                     id="typing-input"
-                    className='word-display-input'
+                    className={`${styleClasses['word-display-input']}`}
                     onKeyDown={handleOnKeyDown}
                     disabled={testIsCompleted}
                 />
-                <p className={`word-display ${testType}`}>
+                <p className={`${styleClasses["word-display"]} ${styleClasses[testType]}`}>
                     {
                         !wordsMatrix ? "" :
                             wordsMatrix.map((arrOfWord, wordIndex) =>
                                 <span
-                                    className={`word `}
+                                    className={`${styleClasses["word"]}`}
                                     data-testid="word"
                                     ref={wordIndex === currentWordIndex ? currentWordRef : null}
                                 >
                                     {arrOfWord.map((char, charIndex) =>
                                         <span
-                                            className={`character ${isCharacterCorrect(char, wordIndex, charIndex)}`}>
+                                            className={`${styleClasses["character"]} ${isCharacterCorrect(char, wordIndex, charIndex)}`}>
                                             {char}
                                         </span>
                                     )}
