@@ -1,4 +1,4 @@
-import { KeyboardEvent, useEffect, useRef, useState } from 'react';
+import { KeyboardEvent, MouseEvent, useEffect, useRef, useState } from 'react';
 import './styles/WordDisplay.css'
 import { apiRequest } from '../baseRequests';
 import { WordResponse } from '../../types'
@@ -7,6 +7,7 @@ const WordDisplay = ({ testIsRunning, setTestIsRunning, testIsCompleted }: { tes
     const [wordsMatrix, setWordsMatrix] = useState<string[][]>();
     const [inputtedWords, setInputtedWords] = useState<string[][]>();
     const [currentWordIndex, setCurrentWordIndex] = useState<number>(-1);
+    const [testType, setTestType] = useState<string>("backwards");
     const currentWordRef = useRef<HTMLSpanElement>(null);
 
     useEffect(() => {
@@ -133,8 +134,18 @@ const WordDisplay = ({ testIsRunning, setTestIsRunning, testIsCompleted }: { tes
         return '';
     };
 
+    const handleTestTypeChange = (e: MouseEvent<HTMLInputElement>) => {
+        setTestType(e.currentTarget.value);
+    };
+
     return (
         <div className='word-display-outer-container'>
+            <div>
+                <input type="radio" id="backwards" value="backwards" name="test-type" onClick={handleTestTypeChange} />
+                <label htmlFor="backwards">Backwards</label>
+                <input type="radio" id="upside-down" value="upside-down" name="test-type" onClick={handleTestTypeChange} />
+                <label htmlFor="upside-down">Upside-Down</label>
+            </div>
             <label htmlFor="typing-input" className="word-display-input-label">Type here:</label>
             <div className="word-display-container">
                 <input
@@ -144,7 +155,7 @@ const WordDisplay = ({ testIsRunning, setTestIsRunning, testIsCompleted }: { tes
                     onKeyDown={handleOnKeyDown}
                     disabled={testIsCompleted}
                 />
-                <p className="word-display">
+                <p className={`word-display ${testType}`}>
                     {
                         !wordsMatrix ? "" :
                             wordsMatrix.map((arrOfWord, wordIndex) =>

@@ -18,9 +18,27 @@ afterEach(() => {
 
 afterAll(() => server.close());
 
+// Will need to rewrite these to visual tests
+
 test('words appear backwards', async () => {
     const wordDisplay = screen.getByRole('paragraph');
     await expect(getComputedStyle(wordDisplay).transform).toBe("scaleX(-1)");
+});
+
+test('text is inverted appropriately with the option selected', async () => {
+    const backwardsBtn = screen.getByRole('radio', {name: /backwards/i});
+    const upsidedownBtn = screen.getByRole('radio', {name: /upside-down/i});
+
+    const wordDisplay = screen.getByRole('paragraph');
+    const firstWord = (await within(wordDisplay).findAllByTestId('word'))[0];
+
+    await user.click(upsidedownBtn);
+    expect(getComputedStyle(wordDisplay).transform).toBe("scaleX(-1)");
+    expect(getComputedStyle(firstWord).transform).toBe("scaleY(-1)");
+
+    await user.click(backwardsBtn);
+    expect(getComputedStyle(wordDisplay).transform).toBe("scaleX(-1)");
+    expect(getComputedStyle(firstWord).transform).toBe("");
 });
 
 test('backspace removes a character', async () => {
