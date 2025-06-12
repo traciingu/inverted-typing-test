@@ -140,11 +140,15 @@ const WordDisplay = ({ testIsRunning, setTestIsRunning, testIsCompleted }: { tes
 
     return (
         <div className='word-display-outer-container'>
-            <div>
-                <input type="radio" id="backwards" value="backwards" name="test-type" onClick={handleTestTypeChange} />
-                <label htmlFor="backwards">Backwards</label>
-                <input type="radio" id="upside-down" value="upside-down" name="test-type" onClick={handleTestTypeChange} />
-                <label htmlFor="upside-down">Upside-Down</label>
+            <div className="test-type-btns-container">
+                <div >
+                    <input type="radio" id="backwards" value="backwards" name="test-type" defaultChecked onClick={handleTestTypeChange} />
+                    <label htmlFor="backwards" className="test-type-label">Backwards</label>
+                </div>
+                <div>
+                    <input type="radio" id="upside-down" value="upside-down" name="test-type" onClick={handleTestTypeChange} />
+                    <label htmlFor="upside-down" className="test-type-label">Upside-Down</label>
+                </div>
             </div>
             <label htmlFor="typing-input" className="word-display-input-label">Type here:</label>
             <div className="word-display-container">
